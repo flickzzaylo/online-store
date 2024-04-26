@@ -71,3 +71,40 @@ def authenticate_user(request):
         'token': str(token)
     }
     return Response(userData, status=status.HTTP_200_OK)
+
+
+class WalletList(generics.ListCreateAPIView):
+    queryset = Wallet.objects.all()
+    serializer_class = WalletSerializer
+
+
+class WalletDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Wallet.objects.all()
+    serializer_class = WalletSerializer
+
+
+class WalletCreate(generics.CreateAPIView):
+    queryset = Wallet.objects.all()
+    serializer_class = WalletSerializer
+
+
+class WalletUpdate(generics.UpdateAPIView):
+    queryset = Wallet.objects.all()
+    serializer_class = WalletSerializer
+
+
+class WalletDelete(generics.DestroyAPIView):
+    queryset = Wallet.objects.all()
+    serializer_class = WalletSerializer
+
+
+class AddAmountToWallet(generics.RetrieveUpdateAPIView):
+    queryset = Wallet.objects.all()
+    serializer_class = WalletSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        amount_to_add = request.data.get('amount_to_add')
+        if amount_to_add:
+            instance.amount += int(amount_to_add)
+            instance.save()

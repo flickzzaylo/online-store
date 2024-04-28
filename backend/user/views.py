@@ -1,3 +1,5 @@
+from rest_framework.views import APIView
+
 from .models import Role, User, Wallet
 from .serializers import RoleSerializer, UserSerializer, WalletSerializer
 
@@ -12,6 +14,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework.exceptions import ValidationError
+from django.db import connection
 
 class RoleList(generics.ListAPIView):
     queryset = Role.objects.all()
@@ -68,7 +71,8 @@ def authenticate_user(request):
         'user_id': user.id,
         'login': user.login,
         'name': user.name,
-        'token': str(token)
+        'token': str(token),
+        'wallet_id': user.wallet_id
     }
     return Response(userData, status=status.HTTP_200_OK)
 
@@ -105,6 +109,40 @@ class AddAmountToWallet(generics.RetrieveUpdateAPIView):
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         amount_to_add = request.data.get('amount_to_add')
+        if amount_to_add > 0:
+            instance.amount_to_add = amount_to_add
+            instance.save()
         if amount_to_add:
             instance.amount += int(amount_to_add)
             instance.save()
+
+class WalletUpdate(generics.UpdateAPIView):
+    queryset = Wallet.objects.all()
+    serializer_class = WalletSerializer
+
+
+def get_walet_by_user(user_id):
+    with connection.cursor() as cursor:
+        cursor.execute("""select user_wallet.amount from user_user
+         RIGHT join user_wallet on user_user.wallet_id=user_wallet.id
+          where user_user.id=%s""",[user_id])
+        rows = cursor.fetchall()
+    # comments = []
+    # for row in rows:
+    #     comment = {
+    #         'id': row[0],
+    #         'message': row[1],
+    #         'user_id': row[2],
+    #         'goods_id': row[3]
+    #     }
+    #     comments.append(comment)
+    wallet = [{
+        'amount': rows[0][0]
+    }]
+    wallet = rows[0][0]
+    return wallet
+
+class WalletByUserId(APIView):
+    def get(self, request, user_id):
+        wallet = get_walet_by_user(user_id)
+        return Response(wallet, status=status.HTTP_200_OK)

@@ -11,6 +11,7 @@ function AddCategory() {
         setName(event.target.value);
     };
 
+
     const handleFileChange = (event) => {
         const reader = new FileReader();
         reader.onload = function (event) {

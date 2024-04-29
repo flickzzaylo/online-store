@@ -16,7 +16,23 @@ class CartCreate(generics.CreateAPIView):
 
 class CartDelete(generics.DestroyAPIView):
     queryset = Cart.objects.all()
-    serializer_class = CartSerializer # Тут всё работает и с POST, но может есть подвох :) Так что я оставлю так
+    serializer_class = CartSerializer
+
+
+def clear_cart_by_user(user_id):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+                DELETE FROM purchase_cart
+                 where purchase_cart.user_id=%s
+            """, [user_id])
+
+class ClearCart(generics.DestroyAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+
+    def post(self, request, user_id):
+        clear_cart_by_user(user_id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class PurchaseByUser(generics.ListAPIView):

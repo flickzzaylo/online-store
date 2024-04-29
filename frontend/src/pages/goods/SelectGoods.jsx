@@ -1,11 +1,11 @@
 import React from 'react';
-import Goods from './Goods';
 import Cart from './Cart';
+import ListGoods from "./ListGoods";
 
 function SelectGoods() {
     return (
         <div>
-            <Goods />
+            <ListGoods />
             <Cart />
         </div>
     );

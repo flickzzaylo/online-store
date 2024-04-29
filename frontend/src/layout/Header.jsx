@@ -25,17 +25,15 @@ function Header({ user }) {
     useEffect(() => {
         if (user) {
             setCurrentUser(user);
-        }
         http
             .get("/wallet/userId="+user.user_id)
             .then(response => {
                 setWallet(response.data);
-                console.log(response.data)
             })
             .catch(e => {
                 console.log(e);
             });
-    }, [user]);
+    }}, [user]);
     const handleChange = (event) => {
         setAmount(event.target.value);
     };
@@ -44,9 +42,8 @@ function Header({ user }) {
         event.preventDefault();
 
         const data = {
-            amount_to_add: amount_to_add,
+            amount_to_add: parseInt(amount_to_add),
         };
-
         http
             .put("/wallet/addamount/"+user.wallet_id, data)
             .then(() => {
@@ -59,13 +56,14 @@ function Header({ user }) {
     };
     const modalStyle = {
       content: {
-        top: '8%',
-        left: '65%',
+        top: '1%',
+        left: '78%',
         right: 'auto',
         bottom: 'auto',
-        width: '25%',
-        height: '10%',
+        width: '20%',
+        height: '9%',
         transform: 'translate(-40%, -10%)',
+        overflow: 'hidden'
       },
     };
     const logOut = () => {
@@ -95,77 +93,81 @@ function Header({ user }) {
         )
     ;
     return (
-        <nav className="navbar navbar-project navbar-expand-lg navbar-light" style={{ background: '#aaafea' }}>
-            {currentUser ? (
-                <div className="ms-3">
-                    <Link className="navbar-brand" to="/listBrands">Бренды</Link>
-                </div>
-            ) : (
-                <div className="ms-3">
-                    Требуется авторизация
-                </div>
-            )}
-            {currentUser ? (
-                <div className="ms-3">
-                    <Link className="navbar-brand" to='/listCategories'>Категории</Link>
-                </div>
-            ) : (
-                <div className="ms-3">
-                    Требуется авторизация
-                </div>
-            )}
-            {currentUser ? (
-                <div className="ms-3">
-                    <Link className="navbar-brand" to="/listSales">Скидки</Link>
-                </div>
-            ) : (
-                <div className="ms-3">
-                    Требуется авторизация
-                </div>
-            )}
-            {currentUser ? (
-                <div className="ms-3">
-                    <Link className="navbar-brand btn" to="/listGoods">Товары</Link>
-                </div>
-            ) : (
-                <div className="ms-3">
-                    Требуется авторизация
-                </div>
-            )}
-                        {currentUser ? (
-                <div className="ms-3">
-                    <Link className="navbar-brand btn" to="/selectGoods">Выбрать товары</Link>
-                </div>
-            ) : (
-                <div className="ms-3">
-                    Требуется авторизация
-                </div>
-            )}
-            {currentUser ? (
+        <nav className="navbar navbar-light" style={{background: '#aaafea'}}>
+                {currentUser ? (
+                    <div className="ms-3">
+                        <Link className="navbar-brand btn" to="/listBrands">Бренды</Link>
+                    </div>
+                ) : (
+                    <div className="ms-3">
+                        Требуется авторизация
+                    </div>
+                )}
+                {currentUser ? (
+                    <div className="ms-3">
+                        <Link className="navbar-brand btn" to='/listCategories'>Категории</Link>
+                    </div>
+                ) : (
+                    <div className="ms-3">
+                        Требуется авторизация
+                    </div>
+                )}
+                {currentUser ? (
+                    <div className="ms-3">
+                        <Link className="navbar-brand btn" to="/listSales">Скидки</Link>
+                    </div>
+                ) : (
+                    <div className="ms-3">
+                        Требуется авторизация
+                    </div>
+                )}
+                {currentUser ? (
+                    <div className="ms-3">
+                        <Link className="navbar-brand btn" to="/listGoods">Товары</Link>
+                    </div>
+                ) : (
+                    <div className="ms-3">
+                        Требуется авторизация
+                    </div>
+                )}
+                {currentUser ? (
+                    <div className="ms-3">
+                        <Link className="navbar-brand btn" to="/listPurchases">История покупок</Link>
+                    </div>
+                ) : (
+                    <div className="ms-3">
+                        Требуется авторизация
+                    </div>
+                )}
                 <div className="ml-auto">
-                    <button className="navbar-brand btn" onClick={openModal}>Баланс: {wallet}</button>
-                    <Modal style={modalStyle} isOpen={modalIsOpen} onRequestClose={closeModal}>
-                        {modalContent}
-                    </Modal>
-                </div>
-            ) : (
-                <div className="ml-auto">
-                    Требуется авторизация
-                </div>
-            )}
-            {currentUser ? (
-                <div className="ml-auto">
-                    <Link className="navbar-brand btn" to="/profile">{currentUser.name}</Link>
-                    <button className="navbar-brand btn" onClick={logOut}>Выйти</button>
-                </div>
-            ) : (
-                <div className="ml-auto">
-                    <Link to="/register" className="nav-link navbar-brand btn navbar-brand-button">Регистрация</Link>
-                    <Link to="/login" className="nav-link navbar-brand btn navbar-brand-button">Вход в систему</Link>
-                </div>
-            )}
+                {currentUser ? (
+                    <div className="ml-auto">
+                        <button className="navbar-brand btn" onClick={openModal}>Баланс: {wallet}</button>
+                        <Modal style={modalStyle} isOpen={modalIsOpen} onRequestClose={closeModal}>
+                            {modalContent}
+                        </Modal>
+                    </div>
+                ) : (
+                    <div className="ml-auto">
+                        Требуется авторизация
+                    </div>
+                )}
+                {currentUser ? (
+                    <div className="ml-auto">
+                        <Link className="navbar-brand btn" to="/profile">{currentUser.name}</Link>
+                        <button className="navbar-brand btn" onClick={logOut}>Выйти</button>
+                    </div>
+                ) : (
+                    <div className="ml-auto">
+                        <Link to="/register"
+                              className="nav-link navbar-brand btn navbar-brand-button">Регистрация</Link>
+                        <Link to="/login" className="nav-link navbar-brand btn navbar-brand-button">Вход в
+                            систему</Link>
+                    </div>
+                )}
+                    </div>
         </nav>
-    );
+);
 };
 
 const mapStateToProps = (state) => {

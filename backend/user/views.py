@@ -116,6 +116,17 @@ class AddAmountToWallet(generics.RetrieveUpdateAPIView):
             instance.amount += int(amount_to_add)
             instance.save()
 
+class RemoveAmountFromWallet(generics.RetrieveUpdateAPIView):
+    queryset = Wallet.objects.all()
+    serializer_class = WalletSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        amount_to_add = request.data.get('amount_to_remove')
+        if amount_to_add:
+            instance.amount -= int(amount_to_add)
+            instance.save()
+
 class WalletUpdate(generics.UpdateAPIView):
     queryset = Wallet.objects.all()
     serializer_class = WalletSerializer
@@ -127,15 +138,6 @@ def get_walet_by_user(user_id):
          RIGHT join user_wallet on user_user.wallet_id=user_wallet.id
           where user_user.id=%s""",[user_id])
         rows = cursor.fetchall()
-    # comments = []
-    # for row in rows:
-    #     comment = {
-    #         'id': row[0],
-    #         'message': row[1],
-    #         'user_id': row[2],
-    #         'goods_id': row[3]
-    #     }
-    #     comments.append(comment)
     wallet = [{
         'amount': rows[0][0]
     }]

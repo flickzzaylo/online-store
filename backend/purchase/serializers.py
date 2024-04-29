@@ -24,7 +24,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
         write_only=True
     )
     goods = GoodsSerializer()
-    brand = BrandSerializer(source='goods.brand')
+    brand = BrandSerializer()
     goodsCategory = GoodsCategorySerializer(source='goods.category')
     class Meta:
         model = Purchase
@@ -34,7 +34,6 @@ class CartPOSTSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = '__all__'
-# Надо проверить что лучше, вроде работает одинаково, во всех остальных я первых ставил))
 
 # class CartPOSTSerializer(serializers.ModelSerializer):
 #     user_id = serializers.PrimaryKeyRelatedField(

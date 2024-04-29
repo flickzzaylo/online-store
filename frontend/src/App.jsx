@@ -21,7 +21,8 @@ import SaleData from "./pages/sales/saleData";
 import ListGoods from "./pages/goods/ListGoods";
 import AddGoods from "./pages/goods/AddGoods";
 import GoodsData from "./pages/goods/GoodsData";
-import SelectGoods from "./pages/SelectGoods";
+import SelectGoods from "./pages/goods/SelectGoods";
+import ListPurchases from "./pages/purchases/ListPurchases";
 
 function App({ user }) {
     return (
@@ -41,10 +42,10 @@ function App({ user }) {
                     <Route path="/listSales" element={<ListSales/>}/>
                     <Route path="/addSale" element={<AddSale/>}/>
                     <Route path="/sale/:id" element={<SaleData/>}/>
-                    <Route path="/listGoods" element={<ListGoods/>}/>
+                    <Route path="/listGoods" element={<SelectGoods/>}/>
                     <Route path="/addGoods" element={<AddGoods/>}/>
                     <Route path="/good/:id" element={<GoodsData/>}/>
-                    <Route path="/selectGoods" element={<SelectGoods/>}/>
+                    <Route path="/listPurchases" element={<ListPurchases/>}/>
                 </Routes>
             </BrowserRouter>
         </div>

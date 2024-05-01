@@ -22,6 +22,7 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
+                ("code", models.TextField()),
                 ("amount", models.IntegerField()),
                 ("begin_date", models.DateField()),
                 ("end_date", models.DateField()),

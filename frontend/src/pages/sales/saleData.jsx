@@ -12,6 +12,7 @@ function SaleData() {
     const { id } = useParams();
     const [sale, setSale] = useState({
         id: id,
+        code: "",
         amount: "",
         begin_date: new Date(),
         end_date: new Date()
@@ -29,6 +30,7 @@ function SaleData() {
                 .then(response => {
                     setSale(prevSale => ({
                         ...prevSale,
+                        code: response.data.code,
                         amount: response.data.amount,
                         begin_date: response.data.begin_date,
                         end_date: response.data.end_date
@@ -46,7 +48,18 @@ function SaleData() {
     function handleChange(event) {
                 setSale({
                     ...sale,
+                    code: sale.code,
                     amount: event.target.value,
+                    begin_date: sale.begin_date,
+                    end_date: sale.end_date
+                });
+    }
+
+    function handleCodeChange(event) {
+                setSale({
+                    ...sale,
+                    code: event.target.value,
+                    amount: sale.amount,
                     begin_date: sale.begin_date,
                     end_date: sale.end_date
                 });
@@ -55,6 +68,7 @@ function SaleData() {
     function handleBeginDateChange(date) {
         setSale({
             ...sale,
+            code: sale.code,
             amount: sale.amount,
             begin_date: date,
             end_date: sale.end_date
@@ -64,6 +78,7 @@ function SaleData() {
     function handleEndDateChange(date) {
         setSale({
             ...sale,
+            code: sale.code,
             amount: sale.amount,
             begin_date: sale.begin_date,
             end_date: date
@@ -73,6 +88,7 @@ function SaleData() {
     function handleSubmit(event) {
         event.preventDefault();
         const data = {
+            code: sale.code,
             amount: sale.amount,
             begin_date: moment(sale.begin_date).format('YYYY-MM-DD'),
             end_date: moment(sale.end_date).format('YYYY-MM-DD')
@@ -105,6 +121,14 @@ function SaleData() {
                 <div className="col-sm-6">
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
+                            <input
+                                type="text"
+                                name="code"
+                                value={sale.code}
+                                placeholder="Промокод"
+                                onChange={handleCodeChange}
+                                className="form-control"
+                            />
                             <input
                                 type="text"
                                 name="amount"

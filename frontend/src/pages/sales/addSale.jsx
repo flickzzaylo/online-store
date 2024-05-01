@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker';
 require('react-datepicker/dist/react-datepicker.css');
 
 function AddSale() {
+    const [code,setCode] = useState("");
     const [amount,setAmount] = useState("");
     const [begin_date,setBeginDate] = useState("");
     const [end_date,setEndDate] = useState("");
@@ -14,6 +15,9 @@ function AddSale() {
     const handleChange = (event) => {
         const { name, value } = event.target;
         switch (name){
+            case('code'):
+                setCode(value)
+                break;
             case('amount'):
                 setAmount(value)
                 break;
@@ -40,6 +44,7 @@ function AddSale() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = {
+            code: code,
             amount: amount,
             begin_date: moment(begin_date).format('YYYY-MM-DD'),
             end_date: moment(end_date).format('YYYY-MM-DD')
@@ -60,6 +65,14 @@ function AddSale() {
                 {!submitted ? (
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
+                            <input
+                                type="text"
+                                name="code"
+                                value={code}
+                                placeholder="Промокод"
+                                onChange={handleChange}
+                                className="form-control"
+                            />
                             <input
                                 type="text"
                                 name="amount"

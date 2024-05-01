@@ -7,6 +7,10 @@ import http from "../../http-common";
 function Cart({ user, cartItems, getCart, removeFromCart }) {
     const [wallet, setWallet] = useState([]);
     const [checkPayment,setPayment] = useState([]);
+    const [checkSale,setCheckSale] = useState(undefined);
+    const [sales, setSales] = useState([]);
+    const [inputedSale, setInputedSale] = useState("");
+    const [saleAmount,setSaleAmount] = useState(0);
     useEffect(() => {
         fetchCart();
         http
@@ -15,6 +19,14 @@ function Cart({ user, cartItems, getCart, removeFromCart }) {
                 setWallet(response.data);
             })
             .catch(e => {
+                console.log(e);
+            });
+        http
+            .get('sales/active')
+            .then(response=>{
+                setSales(response.data);
+            })
+            .catch(e=>{
                 console.log(e);
             });
     }, []);
@@ -55,7 +67,7 @@ function Cart({ user, cartItems, getCart, removeFromCart }) {
     }
 
     // Группировка товаров по goods.id
-    const groupedCartItems = Object.values(cartItems.reduce((acc, cartItem) => {
+    let groupedCartItems = Object.values(cartItems.reduce((acc, cartItem) => {
         const { goods } = cartItem;
         if (!acc[goods.id]) {
             acc[goods.id] = [];
@@ -65,10 +77,38 @@ function Cart({ user, cartItems, getCart, removeFromCart }) {
     }, {}));
 
     // Вычисление общей суммы товаров в корзине
-    const totalAmount = cartItems.reduce((total, cartItem) => total + cartItem.goods.price, 0);
+    let totalAmount = cartItems.reduce((total, cartItem) => total + cartItem.goods.price, 0);
     const amountToPay = {
         amount_to_remove: parseInt(totalAmount),
     };
+    const handleSale = (event) =>{
+        setInputedSale(event.target.value);
+        setCheckSale(undefined);
+    }
+
+    const applySale = () =>{
+        let activeSale = []
+        for(let i = 0;i<sales.length;i++){
+            if(sales[i].code.toLowerCase()===inputedSale.toLowerCase()){
+                setCheckSale(true)
+                setSaleAmount(sales[i].amount);
+                activeSale = sales[i];
+                break;
+            }
+        }
+        if(activeSale.length===0){
+            setCheckSale(false)
+        }
+        if(checkSale){
+            const amount = (100-activeSale.amount)/100;
+            totalAmount = totalAmount*amount;
+            console.log(totalAmount)
+            groupedCartItems[0][0].goods.price*=amount;
+            console.log(groupedCartItems)
+            getCart(user.user_id);
+        }
+    }
+
     return (
         <div className="cart-container">
             <div className="cart-float">
@@ -83,7 +123,8 @@ function Cart({ user, cartItems, getCart, removeFromCart }) {
                                 <ul>
                                     <div>
                                         {groupedCartItems[goodsId].length}
-                                        <span className="close-icon ml-1" onClick={() => handleRemoveFromCart(groupedCartItems[goodsId][0].id)}>×</span>
+                                        <span className="close-icon ml-1"
+                                              onClick={() => handleRemoveFromCart(groupedCartItems[goodsId][0].id)}>×</span>
                                     </div>
                                 </ul>
                             </div>
@@ -93,18 +134,35 @@ function Cart({ user, cartItems, getCart, removeFromCart }) {
                 <div className="total-amount">
                     Общая сумма: {totalAmount}
                 </div>
+
+                <form className="form-inline d-flex align-items-center" style={{display: 'flex'}}>
+                    <input type="text"
+                           value={inputedSale}
+                           className="form-control mb-1 mr-sm-1 flex-grow-1"
+                           placeholder="Промокод"
+                           style={{marginRight: '5px'}}
+                           onChange={handleSale}
+                    />
+                    <button type="button" className="btn btn-success"
+                            style={{marginBottom: '3px'}}
+                            onClick={applySale}>✅
+                    </button>
+                </form>
+                {checkSale===false && <div className="text-danger">Промокод не найден</div> }
+                {checkSale===true && <div className="text-success">Скидка в {saleAmount}% применена</div> }
+
                 <button className="btn btn-primary" type="submit" onClick={payGoods}>
                     Оплатить
                 </button>
-                {!checkPayment && <div className="text-danger">Недостаточно средств </div> }
+                {!checkPayment && <div className="text-danger">Недостаточно средств</div>}
             </div>
         </div>
     );
 }
 
 const mapStateToProps = (state) => {
-    const { user } = state.auth;
-    const { cartItems } = state.cart;
+    const {user} = state.auth;
+    const {cartItems} = state.cart;
     return {
         user,
         cartItems
@@ -114,7 +172,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getCart: (cartItems) => dispatch(getCart(cartItems)),
-        removeFromCart: (cartId, user_id) => dispatch(removeFromCart(cartId, user_id))
+        removeFromCart: (cartId, user_id) => dispatch(removeFromCart(cartId, user_id)),
     };
 };
 

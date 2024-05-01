@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Апр 29 2024 г., 15:55
+-- Время создания: Май 01 2024 г., 09:36
 -- Версия сервера: 10.4.32-MariaDB
 -- Версия PHP: 8.2.12
 
@@ -154,7 +154,7 @@ CREATE TABLE `auth_user` (
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
 (2, '', NULL, 0, '1', '1', '1', '', 0, 0, '0000-00-00 00:00:00.000000'),
 (3, '', NULL, 0, '2', '2', '2', '', 0, 0, '0000-00-00 00:00:00.000000'),
-(4, 'pbkdf2_sha256$720000$WPLuFzHyqjpXX0XnyIFVPm$XZjQouNyIs3KPtxjkVTwyx8Mqck1ULKmCtijvCc8aBk=', '2024-04-25 05:46:09.820621', 1, 'vadim', '', '', 'vadimzooru@gmail.com', 1, 1, '2024-03-27 09:03:53.144642');
+(4, 'pbkdf2_sha256$720000$WPLuFzHyqjpXX0XnyIFVPm$XZjQouNyIs3KPtxjkVTwyx8Mqck1ULKmCtijvCc8aBk=', '2024-05-01 04:50:27.641308', 1, 'vadim', '', '', 'vadimzooru@gmail.com', 1, 1, '2024-03-27 09:03:53.144642');
 
 -- --------------------------------------------------------
 
@@ -217,7 +217,12 @@ CREATE TABLE `django_admin_log` (
 INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`, `action_flag`, `change_message`, `content_type_id`, `user_id`) VALUES
 (1, '2024-03-27 09:04:31.115650', '1', 'Sale object (1)', 1, '[{\"added\": {}}]', 13, 4),
 (2, '2024-03-27 09:47:30.583931', '1', 'Cart object (1)', 1, '[{\"added\": {}}]', 11, 4),
-(3, '2024-03-27 09:47:35.959488', '2', 'Cart object (2)', 1, '[{\"added\": {}}]', 11, 4);
+(3, '2024-03-27 09:47:35.959488', '2', 'Cart object (2)', 1, '[{\"added\": {}}]', 11, 4),
+(4, '2024-05-01 04:50:49.769852', '1', 'Sale object (1)', 2, '[{\"changed\": {\"fields\": [\"Code\"]}}]', 13, 4),
+(5, '2024-05-01 04:50:57.081786', '3', 'Sale object (3)', 2, '[{\"changed\": {\"fields\": [\"Code\"]}}]', 13, 4),
+(6, '2024-05-01 04:51:04.948800', '4', 'Sale object (4)', 2, '[{\"changed\": {\"fields\": [\"Code\"]}}]', 13, 4),
+(7, '2024-05-01 04:51:21.373921', '5', 'Sale object (5)', 2, '[{\"changed\": {\"fields\": [\"Code\"]}}]', 13, 4),
+(8, '2024-05-01 04:51:31.770366', '6', 'Sale object (6)', 2, '[{\"changed\": {\"fields\": [\"Code\"]}}]', 13, 4);
 
 -- --------------------------------------------------------
 
@@ -315,7 +320,8 @@ CREATE TABLE `django_session` (
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
 ('8mkyraxa041obamokdydy6x5utja6hy2', '.eJxVjMsOwiAQRf-FtSFEGB4u3fsNZIAZqRpISrsy_rtt0oVu7znnvkXEdalxHTTHqYiLMOL0uyXMT2o7KA9s9y5zb8s8Jbkr8qBD3nqh1_Vw_w4qjrrVGYLxGQ2Tt569spZLASAXyKNiDdkBM0IKmsM50YYVkFbsWJF2SXy-_yI4wQ:1rpPCW:6--kSoachZUXdrUfZvllMsDJ8P7tLI3EcaEMBbvhtlY', '2024-04-10 09:04:04.170253'),
-('eef8oha0darro1eqfzv5nwre2wt5bxjy', '.eJxVjMsOwiAQRf-FtSFEGB4u3fsNZIAZqRpISrsy_rtt0oVu7znnvkXEdalxHTTHqYiLMOL0uyXMT2o7KA9s9y5zb8s8Jbkr8qBD3nqh1_Vw_w4qjrrVGYLxGQ2Tt569spZLASAXyKNiDdkBM0IKmsM50YYVkFbsWJF2SXy-_yI4wQ:1rzrvt:3MholdFs0XcefI5qRYifgMRq7RLhZgMu5Nyu7UKqdXk', '2024-05-09 05:46:09.824617');
+('eef8oha0darro1eqfzv5nwre2wt5bxjy', '.eJxVjMsOwiAQRf-FtSFEGB4u3fsNZIAZqRpISrsy_rtt0oVu7znnvkXEdalxHTTHqYiLMOL0uyXMT2o7KA9s9y5zb8s8Jbkr8qBD3nqh1_Vw_w4qjrrVGYLxGQ2Tt569spZLASAXyKNiDdkBM0IKmsM50YYVkFbsWJF2SXy-_yI4wQ:1rzrvt:3MholdFs0XcefI5qRYifgMRq7RLhZgMu5Nyu7UKqdXk', '2024-05-09 05:46:09.824617'),
+('wobl4dni3bt96ifrgdkrqp1bq1olxfnd', '.eJxVjMsOwiAQRf-FtSFEGB4u3fsNZIAZqRpISrsy_rtt0oVu7znnvkXEdalxHTTHqYiLMOL0uyXMT2o7KA9s9y5zb8s8Jbkr8qBD3nqh1_Vw_w4qjrrVGYLxGQ2Tt569spZLASAXyKNiDdkBM0IKmsM50YYVkFbsWJF2SXy-_yI4wQ:1s21vH:W27GE8FOBN60491ewnewqwevSk5-67uTyJQp3tcckds', '2024-05-15 04:50:27.646307');
 
 -- --------------------------------------------------------
 
@@ -445,6 +451,7 @@ INSERT INTO `purchase_purchase` (`id`, `user_id`, `goods_id`) VALUES
 
 CREATE TABLE `sale_sale` (
   `id` bigint(20) NOT NULL,
+  `code` longtext NOT NULL,
   `amount` int(11) NOT NULL,
   `begin_date` date NOT NULL,
   `end_date` date NOT NULL
@@ -454,12 +461,12 @@ CREATE TABLE `sale_sale` (
 -- Дамп данных таблицы `sale_sale`
 --
 
-INSERT INTO `sale_sale` (`id`, `amount`, `begin_date`, `end_date`) VALUES
-(1, 15, '2024-03-01', '2024-04-17'),
-(3, 10, '2003-02-01', '2024-10-01'),
-(4, 50, '2024-04-01', '2024-04-16'),
-(5, 99, '2014-08-01', '2014-08-02'),
-(6, 10, '2024-04-01', '2024-06-01');
+INSERT INTO `sale_sale` (`id`, `code`, `amount`, `begin_date`, `end_date`) VALUES
+(1, 'NEWYEAR', 15, '2024-03-01', '2024-04-17'),
+(3, 'FREE10', 10, '2003-02-01', '2024-10-01'),
+(4, 'FISHINGSEASON', 50, '2024-04-01', '2024-04-16'),
+(5, 'WHAT?', 99, '2014-08-01', '2014-08-02'),
+(6, 'HELLOSALES', 15, '2024-04-01', '2024-06-01');
 
 -- --------------------------------------------------------
 
@@ -721,7 +728,7 @@ ALTER TABLE `comment_comment`
 -- AUTO_INCREMENT для таблицы `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT для таблицы `django_content_type`
@@ -757,7 +764,7 @@ ALTER TABLE `goods_goodscategory`
 -- AUTO_INCREMENT для таблицы `purchase_cart`
 --
 ALTER TABLE `purchase_cart`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=257;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=303;
 
 --
 -- AUTO_INCREMENT для таблицы `purchase_purchase`
@@ -769,7 +776,7 @@ ALTER TABLE `purchase_purchase`
 -- AUTO_INCREMENT для таблицы `sale_sale`
 --
 ALTER TABLE `sale_sale`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT для таблицы `user_role`

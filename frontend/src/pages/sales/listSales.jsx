@@ -50,7 +50,7 @@ function ListSales() {
                         {sales.map((sale) => (
                             <Link to={`/sale/${sale.id}`} key={sale.id}
                                   className="list-group-item list-group-item-action">
-                                {sale.amount}, Дата начала:{sale.begin_date}, Дата окончания:{sale.end_date}
+                                {sale.code}, {sale.amount}%, Дата начала:{sale.begin_date}, Дата окончания:{sale.end_date}
                             </Link>
                         ))}
                     </ul>

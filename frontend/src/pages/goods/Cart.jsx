@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import { connect } from 'react-redux';
 import { getCart, removeFromCart } from '../../actions/cart';
 import './Cart.css';
@@ -11,9 +11,35 @@ function Cart({ user, cartItems, getCart, removeFromCart }) {
     const [sales, setSales] = useState([]);
     const [inputedSale, setInputedSale] = useState("");
     const [saleAmount,setSaleAmount] = useState(0);
+
+    // const[groupedCartItems, setTotalItems] = useState([]);
+    const [totalAmount,setTotalAmount] = useState(0);
     useEffect(() => {
-        fetchCart();
-        http
+        // fetchCart();
+        // http
+        //     .get("/wallet/userId="+user.user_id)
+        //     .then(response => {
+        //         setWallet(response.data);
+        //     })
+        //     .catch(e => {
+        //         console.log(e);
+        //     });
+        // http
+        //     .get('sales/active')
+        //     .then(response=>{
+        //         setSales(response.data);
+        //     })
+        //     .catch(e=>{
+        //         console.log(e);
+        //     });
+        if(!checkSale) {
+            setTotalAmount(cartItems.reduce((total, cartItem) => total + cartItem.goods.price, 0));
+        }
+    }, [cartItems]);
+
+    useEffect(()=>{
+      fetchCart();
+      http
             .get("/wallet/userId="+user.user_id)
             .then(response => {
                 setWallet(response.data);
@@ -21,7 +47,7 @@ function Cart({ user, cartItems, getCart, removeFromCart }) {
             .catch(e => {
                 console.log(e);
             });
-        http
+      http
             .get('sales/active')
             .then(response=>{
                 setSales(response.data);
@@ -29,11 +55,12 @@ function Cart({ user, cartItems, getCart, removeFromCart }) {
             .catch(e=>{
                 console.log(e);
             });
-    }, []);
+    },[])
 
     const fetchCart = () => {
         console.log('Корзина');
         getCart(user.user_id);
+        // setTotalAmount(cartItems.reduce((total, cartItem) => total + cartItem.goods.price, 0));
     };
 
     const payGoods = () =>{
@@ -61,9 +88,11 @@ function Cart({ user, cartItems, getCart, removeFromCart }) {
         }
     }
 
-    const handleRemoveFromCart = (cartId) => {
-        removeFromCart(cartId, user.user_id);
+
+    const handleRemoveFromCart = async (cartId) => {
+        await removeFromCart(cartId, user.user_id);
         setPayment(true);
+        await setTotalAmount(cartItems.reduce((total, cartItem) => total + cartItem.goods.price, 0));
     }
 
     // Группировка товаров по goods.id
@@ -77,35 +106,36 @@ function Cart({ user, cartItems, getCart, removeFromCart }) {
     }, {}));
 
     // Вычисление общей суммы товаров в корзине
-    let totalAmount = cartItems.reduce((total, cartItem) => total + cartItem.goods.price, 0);
+    // let totalAmount = cartItems.reduce((total, cartItem) => total + cartItem.goods.price, 0);
     const amountToPay = {
         amount_to_remove: parseInt(totalAmount),
     };
     const handleSale = (event) =>{
         setInputedSale(event.target.value);
         setCheckSale(undefined);
+        setTotalAmount(cartItems.reduce((total, cartItem) => total + cartItem.goods.price, 0));
     }
-
-    const applySale = () =>{
-        let activeSale = []
-        for(let i = 0;i<sales.length;i++){
-            if(sales[i].code.toLowerCase()===inputedSale.toLowerCase()){
-                setCheckSale(true)
-                setSaleAmount(sales[i].amount);
-                activeSale = sales[i];
-                break;
+    const applySale = async () =>{
+        let activeSale = null;
+            for (let i = 0; i < sales.length; i++) {
+                if (sales[i].code.toLowerCase() === inputedSale.toLowerCase()) {
+                    await setCheckSale(true)
+                    setSaleAmount(sales[i].amount);
+                    activeSale = sales[i];
+                    break;
+                }
             }
-        }
-        if(activeSale.length===0){
-            setCheckSale(false)
-        }
-        if(checkSale){
-            const amount = (100-activeSale.amount)/100;
-            totalAmount = totalAmount*amount;
-            console.log(totalAmount)
-            groupedCartItems[0][0].goods.price*=amount;
-            console.log(groupedCartItems)
+            if (!activeSale) {
+                await setCheckSale(false)
+                setTotalAmount(cartItems.reduce((total, cartItem) => total + cartItem.goods.price, 0));
+            }
+        if(activeSale){
             getCart(user.user_id);
+            let amount = (100-activeSale.amount)/100;
+            setTotalAmount(totalAmount*amount);
+            console.log(totalAmount)
+            // groupedCartItems[0][0].goods.price*=amount;
+            // console.log(groupedCartItems)
         }
     }
 
